@@ -1,0 +1,160 @@
+---
+title: "Final_Visualization_ data_Jirarat"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    social: menu
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+
+library(lubridate)
+library(mapproj)
+library(xts)
+library(ggplot2)
+library(dplyr)
+library(leaflet)
+library(plotly)
+library(DT)
+library(maps)
+library(maptools)
+library(htmltools)
+library(viridisLite)
+library(highcharter)
+library(treemap)
+
+
+# Load data
+ data <- read.csv(file.choose())
+
+# Data preparation 
+ data <-  data[,c("Date", "Time", "Latitude", "Longitude", "Type", "Depth", "Magnitude", "Magnitude.Type") ]
+
+ data$Date <- as.Date( data$Date, format = "%m/%d/%Y")
+
+ data$Year<- year( data$Date)
+ data$Month <- month( data$Date)
+ data$Day <- day( data$Date)
+
+w <- map('world', fill=TRUE, col="transparent", plot=FALSE)
+IDs <- sapply(strsplit(w$names, ":"), function(x) x[1])
+w_sp <- map2SpatialPolygons(w, IDs=IDs, proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+pSP <- SpatialPoints(cbind(x = data$Longitude, y = data$Latitude), proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+idx <- over(pSP, w_sp)
+sNames <- sapply(w_sp@polygons, function(x) x@ID)
+data$Country <- sNames[idx]
+
+data_country <- data[!is.na(data$Country),]
+
+```
+
+Column {data-width=600} 
+-----------------------------------------------------------------------
+
+### Interactive Clusters of Earthquake Zones
+
+```{r}
+##Mapping 
+ data %>%
+    leaflet() %>%
+    addTiles() %>%
+    addMarkers(lat= data$Latitude, lng= data$Longitude, clusterOptions = markerClusterOptions(),
+               popup= paste( data$Type,
+                            "<br><strong>Magnitude: </strong>",  data$Magnitude,
+                            "<br><strong>Depth: </strong>",  data$Depth,
+                            "<br><strong>Date: </strong>",  data$Date,
+                            "<br><strong>Date: </strong>",  data$Time
+               ))
+```
+
+
+### Data table
+
+```{r}
+
+eq_table <-  data_country[, c("Country","Year","Magnitude","Depth")] 
+datatable(eq_table)
+
+```
+
+Column {data-width=400}
+-----------------------------------------------------------------------
+
+### 
+
+```{r}
+# Earthquakes per Year
+
+per_year <-  data %>%
+    filter(Type=="Earthquake") %>%
+    group_by(Year) %>%
+    summarise(Observations=n())
+
+line_chart_year <- plot_ly(per_year, x = ~Year, y = ~Observations, 
+                                       type = "scatter", 
+                                       mode = "lines+markers",
+                                       marker = list(size = 7, color = "#1477d2"), 
+                                       line = list(color = "#4aafd5")) %>%
+  layout(title = "Earthquakes per Year",
+         xaxis = list(title = "Year"),
+         yaxis = list(title = "Observations"))
+
+# Display the interactive line chart
+line_chart_year
+
+```
+
+###
+```{r}
+
+# Average Earthquakes per Month
+per_month <-  data %>%
+    filter(Type=="Earthquake") %>%
+    group_by (Year, Month) %>%
+    summarise(Observations=n())
+
+per_month <- per_month %>%
+    group_by (Month) %>%
+    summarise(Mean=mean(Observations))
+
+bar_chart_month <- plot_ly(per_month, x = ~Month, y = ~Mean, 
+                                       type = "bar",
+                                       marker = list(color = "#4aafd5")) %>%
+  layout(title = "Average Earthquakes per Month",
+         xaxis = list(title = "Month", ticktext = month.abb, tickvals = 1:12),
+         yaxis = list(title = "Average"))
+
+# Display the interactive bar chart
+bar_chart_month
+
+
+```
+
+### 
+```{r}
+# Earthquakes per Day of a Month: 
+per_day <-  data %>%
+    filter(Type=="Earthquake") %>%
+    group_by (Day, Year) %>%
+    summarise(Observations=n())
+
+per_day <- per_day %>%
+    group_by (Day) %>%
+    summarise(Mean=mean(Observations))
+
+bar_chart_day <- plot_ly(per_day, x = ~Day, y = ~Mean, 
+                                     type = "bar",
+                                     marker = list(color = "#4aafd5")) %>%
+  layout(title = "Average Earthquakes per Day of a Month",
+         xaxis = list(title = "Day", tickvals = 1:31),
+         yaxis = list(title = "Average"),
+         caption = "Source: Significant Earthquakes, 1965-2016")
+
+# Display the interactive bar chart
+bar_chart_day
+
+```
+
