@@ -19,19 +19,26 @@ In this visualization project, five interactive visuals were created using R. Th
 #### 1 Interactive map of the world
 The interactive world map is a user-friendly tool that visualizes the geographical distribution of earthquakes. It allows users to explore and analyze patterns by zooming and clicking on specific regions. Earthquake events are represented by markers, with a popup appearing when clicked, showing information such as magnitude, depth, and date. The markers are color-coded using green for areas with lower earthquake density and red for those with higher density. This approach enables users to quickly identify patterns and seismic activity levels across the globe, making the map an effective visualization tool. It helps users focus on areas of interest and identify high-risk locations and trends in seismic activity.
 
-<img width="639" alt="image" src="https://github.com/jiraratset/earthquake_visualize_r/assets/123735686/1f54c7b8-7c82-4cfc-89b8-f350cbb4674a">
+
+# <img width="639" alt="image" src="https://github.com/jiraratset/earthquake_visualize_r/assets/123735686/1f54c7b8-7c82-4cfc-89b8-f350cbb4674a">
 
 #### 2 Interactive line chart
 The visualization uses a line graph and two bar charts to display different aspects of earthquake events. The line chart shows the yearly count of earthquakes from 1965 to 2016, while the bar charts present the average number of monthly earthquakes and earthquakes per day of a month. These visualizations help identify patterns and when earthquakes occur more frequently. The charts use blue color for accessibility and have a clean background for easy readability.
 
-<img width="434" alt="image" src="https://github.com/jiraratset/earthquake_visualize_r/assets/123735686/b567c0fe-a2c8-40d7-81ac-a44175db8f8f">
+
+
+
+# <img width="434" alt="image" src="https://github.com/jiraratset/earthquake_visualize_r/assets/123735686/b567c0fe-a2c8-40d7-81ac-a44175db8f8f">
 
 #### 3 Interactive data table
 The interactive data table is designed to display large amounts of earthquake data in a tabular format. It includes information about the country, year, magnitude, and depth of each earthquake. Users can interact with the table to sort, filter, and search through the data, allowing for in-depth exploration and analysis. This tool enables users to quickly find specific information and identify patterns and trends in the data.
 
-<img width="644" alt="image" src="https://github.com/jiraratset/earthquake_visualize_r/assets/123735686/6b16c409-729f-4943-99e4-1a93059f0189">
+
+
+
+# <img width="644" alt="image" src="https://github.com/jiraratset/earthquake_visualize_r/assets/123735686/6b16c409-729f-4943-99e4-1a93059f0189">
 
 ### Full dashboard
-<img width="1077" alt="image" src="https://github.com/jiraratset/earthquake_visualize_r/assets/123735686/00ea7175-302f-4738-ba1b-792b5a5d5653">
+# <img width="1077" alt="image" src="https://github.com/jiraratset/earthquake_visualize_r/assets/123735686/00ea7175-302f-4738-ba1b-792b5a5d5653">
 
 
